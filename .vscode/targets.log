@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May 27 01:42:22 2022
+# Make data base, printed on Fri May 27 01:46:56 2022
 
 # Variables
 
@@ -44,7 +44,6 @@ GNUMAKEFLAGS :=
 VSCODE_VERBOSE_LOGGING = true
 # environment
 VSCODE_CWD = /mnt/d/Programs/Microsoft VS Code
- 
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
@@ -147,7 +146,6 @@ MAKEFILES :=
 PAGER = less
 # environment
 LC_ALL = C
- 
 # environment
 CONDA_PYTHON_EXE = /opt/anaconda3/bin/python
 # environment
@@ -239,6 +237,6 @@ GNUmakefile:
 # strcache performance: lookups = 16 / hit rate = 18%
 # hash-table stats:
 # Load=13/8192=0%, Rehash=0, Collisions=1/16=6%
-# Finished Make data base on Fri May 27 01:42:22 2022
+# Finished Make data base on Fri May 27 01:46:56 2022
 
  
