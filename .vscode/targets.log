@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun May 22 22:53:40 2022
+# Make data base, printed on Fri May 27 01:42:22 2022
 
 # Variables
 
@@ -35,7 +35,7 @@ SHELL = /bin/sh
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en","availableLanguages":{}}
 # environment
-_ = /usr/bin/sh
+_ = /home/ray/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/node
 # makefile
 MAKEFILE_LIST := 
 # 'override' directive
@@ -44,20 +44,29 @@ GNUMAKEFLAGS :=
 VSCODE_VERBOSE_LOGGING = true
 # environment
 VSCODE_CWD = /mnt/d/Programs/Microsoft VS Code
+ 
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /home/ray/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/d/Programs/ImageMagick-7.1.0-Q16-HDRI:/mnt/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/iCLS/:/mnt/c/Program Files/Intel/Intel(R) Management Engine Components/iCLS/:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/DAL:/mnt/c/Program Files/Intel/Intel(R) Management Engine Components/DAL:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/d/Programs/Git/cmd:/mnt/d/Programs/mingw64/bin:/mnt/d/phpStudy/PHPTutorial/php/php-7.2.1-nts:/mnt/c/ProgramData/ComposerSetup/bin:/mnt/d/Programs/nodejs/:/mnt/d/Programs/texlive/2021/bin/win32:/mnt/d/Programs/微信web开发者工具/dll:/mnt/c/Program Files/dotnet/:/mnt/d/Programs/Go/bin:/mnt/d/Programs/PuTTY/:/mnt/c/Users/Ray/AppData/Local/Microsoft/WindowsApps:/mnt/d/Programs/PyCharm 2020.2.3/bin:/mnt/d/Programs/bandizip/:/mnt/d/Programs/CLion 2020.2.4/bin:/mnt/d/Programs/IntelliJ IDEA 2020.3.2/bin:/mnt/d/Programs/jdk/jdk13/bin:/mnt/d/Programs/PhpStorm 2021.2/bin:/mnt/c/Users/Ray/AppData/Roaming/Composer/vendor/bin:/mnt/c/Users/Ray/AppData/Roaming/npm:/mnt/c/Users/Ray/go/bin:/mnt/d/Programs/GoLand 2021.3.4/bin:/mnt/d/Programs/Microsoft VS Code/bin
+PATH = /home/ray/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/remote-cli:/opt/anaconda3/bin:/opt/anaconda3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/d/Programs/ImageMagick-7.1.0-Q16-HDRI:/mnt/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/iCLS:/mnt/c/Program Files/Intel/Intel(R) Management Engine Components/iCLS:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0:/mnt/c/WINDOWS/System32/OpenSSH:/mnt/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/DAL:/mnt/c/Program Files/Intel/Intel(R) Management Engine Components/DAL:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/d/Programs/Git/cmd:/mnt/d/Programs/mingw64/bin:/mnt/d/phpStudy/PHPTutorial/php/php-7.2.1-nts:/mnt/c/ProgramData/ComposerSetup/bin:/mnt/d/Programs/nodejs:/mnt/d/Programs/texlive/2021/bin/win32:/mnt/d/Programs/微信web开发者工具/dll:/mnt/c/Program Files/dotnet:/mnt/d/Programs/Go/bin:/mnt/d/Programs/PuTTY:/mnt/c/Users/Ray/AppData/Local/Microsoft/WindowsApps:/mnt/d/Programs/PyCharm 2020.2.3/bin:/mnt/d/Programs/bandizip:/mnt/d/Programs/CLion 2020.2.4/bin:/mnt/d/Programs/IntelliJ IDEA 2020.3.2/bin:/mnt/d/Programs/jdk/jdk13/bin:/mnt/d/Programs/PhpStorm 2021.2/bin:/mnt/c/Users/Ray/AppData/Roaming/Composer/vendor/bin:/mnt/c/Users/Ray/AppData/Roaming/npm:/mnt/c/Users/Ray/go/bin:/mnt/d/Programs/GoLand 2021.3.4/bin:/mnt/d/Programs/Microsoft VS Code/bin:/opt/RISCV/bin:/opt/go/bin
+# environment
+LSCOLORS = Gxfxcxdxbxegedabagacad
 # environment
 BASH_ENV = /etc/bash.bashrc
 # environment
+CONDA_PREFIX = /opt/anaconda3
+# environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-2f07d441-269a-49a4-89d9-4d86bc3d27c4.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-a4ef3a49-c69d-44b1-aef2-7280f8b979dd.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
+# environment
+LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
 # automatic
 %F = $(notdir $%)
+# environment
+CONDA_EXE = /opt/anaconda3/bin/conda
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -65,25 +74,35 @@ PWD = /home/ray/junior/Compiler
 # default
 .LOADED := 
 # environment
-WSL_INTEROP = /run/WSL/12_interop
+WSL_INTEROP = /run/WSL/33425_interop
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 HOME = /home/ray
 # environment
+RISCV = /opt/RISCV
+# environment
 LOGNAME = ray
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# environment
+CONDA_PROMPT_MODIFIER = (base) 
+# environment
+ZSH = /home/ray/.oh-my-zsh
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
 MAKELEVEL := 0
+# environment
+CONDA_DEFAULT_ENV = base
 # default
 MAKE = $(MAKE_COMMAND)
 # default
 MAKECMDGOALS := all
+# environment
+CONDA_SHLVL = 1
 # environment
 SHLVL = 0
 # default
@@ -94,6 +113,8 @@ USER = ray
 .DEFAULT_GOAL := 
 # environment
 NAME = DESKTOP-1MH0N8Q
+# environment
+LESS = -R
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
@@ -123,13 +144,20 @@ MAKEFILES :=
 # automatic
 <F = $(notdir $<)
 # environment
+PAGER = less
+# environment
 LC_ALL = C
+ 
+# environment
+CONDA_PYTHON_EXE = /opt/anaconda3/bin/python
 # environment
 HOSTTYPE = x86_64
 # automatic
 ^F = $(notdir $^)
 # default
 SUFFIXES := 
+# environment
+_CE_M = 
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # default
@@ -142,8 +170,10 @@ TERM = xterm-256color
 VSCODE_EXTHOST_WILL_SEND_SOCKET = true
 # environment
 WSL_DISTRO_NAME = Ubuntu-20.04
+# environment
+_CE_CONDA = 
 # variable set hash-table stats:
-# Load=65/1024=6%, Rehash=0, Collisions=4/87=5%
+# Load=79/1024=8%, Rehash=0, Collisions=6/101=6%
 
 # Pattern-specific Variable Values
 
@@ -209,6 +239,6 @@ GNUmakefile:
 # strcache performance: lookups = 16 / hit rate = 18%
 # hash-table stats:
 # Load=13/8192=0%, Rehash=0, Collisions=1/16=6%
-# Finished Make data base on Sun May 22 22:53:40 2022
+# Finished Make data base on Fri May 27 01:42:22 2022
 
  

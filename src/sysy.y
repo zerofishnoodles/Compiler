@@ -20,7 +20,7 @@ void display(struct node *,int);
 };
 
 //  %type 定义非终结符的语义值类型
-%type  <ptr> program ExtDefList ExtDef  Specifier ExtDecList FuncDec CompSt VarList VarDec ParamDec Stmt StmList DefList Def DecList Dec Exp Args BlockList BlockItem Dim DimDeclare
+%type  <ptr> program ExtDefList ExtDef  Specifier ExtDecList FuncDec CompSt VarList VarDec ParamDec Stmt StmList DefList Def DecList Dec Exp Args BlockList BlockItem Dim DimDeclare InitList
 
 //% token 定义终结符的语义值类型
 %token <type_int> INT              //指定INT的语义值是type_int，有词法分析得到的数值
@@ -101,6 +101,7 @@ DefList: {$$=NULL; }
         | Def DefList {$$=mknode(DEF_LIST,$1,$2,NULL,yylineno);}
         ;
 Def:    Specifier DecList SEMI {$$=mknode(VAR_DEF,$1,$2,NULL,yylineno);}
+        /* | error SEMI   {$$=NULL; } */
         ;
 DecList: Dec  {$$=mknode(DEC_LIST,$1,NULL,NULL,yylineno);}
        | Dec COMMA DecList  {$$=mknode(DEC_LIST,$1,$3,NULL,yylineno);}
@@ -127,11 +128,17 @@ Exp:    Exp ASSIGNOP Exp {$$=mknode(ASSIGNOP,$1,$3,NULL,yylineno);strcpy($$->typ
       | FLOAT         {$$=mknode(FLOAT,NULL,NULL,NULL,yylineno);$$->type_float=$1;$$->type=FLOAT;}
       | Exp INC       {$$=mknode(INC,$1,NULL,NULL,yylineno);strcpy($$->type_id,"INC");}
       | ID Dim        {$$=mknode(ARRAY,$2,NULL,NULL,yylineno);strcpy($$->type_id,$1);}
-      | LC InitList RC  {$$=mknode(INIT_LIST,$2,NULL,NULL,yylineno);strcpy($$->type_id,$1);}
+      | LC InitList RC  {$$=mknode(INIT_LIST,$2,NULL,NULL,yylineno);strcpy($$->type_id,"InitList");}
       ;
 
 InitList:  {$$=NULL; }
-      | INT COMMA
+      | INT COMMA {$$=mknode(INT,NULL,NULL,NULL,yylineno);$$->type_int=$1;$$->type=INT;}
+      | INT {$$=mknode(INT,NULL,NULL,NULL,yylineno);$$->type_int=$1;$$->type=INT;}
+      | FLOAT {$$=mknode(FLOAT,NULL,NULL,NULL,yylineno);$$->type_float=$1;$$->type=FLOAT;}
+      | FLOAT COMMA {$$=mknode(FLOAT,NULL,NULL,NULL,yylineno);$$->type_float=$1;$$->type=FLOAT;}
+      | LC InitList RC {$$=mknode(INIT_LIST,$2,NULL,NULL,yylineno);strcpy($$->type_id,"InitList");}
+      | LC InitList RC COMMA {$$=mknode(INIT_LIST,$2,NULL,NULL,yylineno);strcpy($$->type_id,"InitList");}
+        ;
 
 Dim:    {$$=NULL; }
       | LB ID RB Dim     {$$=mknode(DIM,$4,NULL,NULL,yylineno);strcpy($$->type_id,$2);$$->type=ID;}
