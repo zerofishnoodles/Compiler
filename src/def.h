@@ -2,7 +2,8 @@
 #include "stdlib.h"
 #include "string.h"
 #include "stdarg.h"
-#include "sysy.tab.h"
+// #include "sysy.tab.h"
+#include "parser.tab.h"
 
 enum node_kind
 {
@@ -50,6 +51,7 @@ enum node_kind
 
 #define MAXLENGTH 1000     //定义符号表的大小
 #define DX 3 * sizeof(int) //活动记录控制信息需要的单元数
+#define MAXPARAMNUM 10
 char filename[50];
 int lev;
 
@@ -108,6 +110,8 @@ struct symbol
   char flag;      //符号标记，函数：'F'  变量：'V'   参数：'P'  临时变量：'T'
   char offset;    //外部变量和局部变量在其静态数据区或活动记录中的偏移量
                   //或函数活动记录大小，目标代码生成时使用
+  int param_type[MAXPARAMNUM];
+  char fun_type[256];
   //其它...
 } ;
 
@@ -128,6 +132,9 @@ struct symbol_scope_begin
 struct node *mknode(int kind,struct node *first,struct node *second, struct node *third,int pos );
 void display(struct node *T, int indent);
 void DisplaySymbolTable();
+void build_symtable();
+int insert_symtable();
+struct symbol tmp_symbols[MAXPARAMNUM];
 //int Semantic_Analysis(struct node* T,int type,int level,char flag,int command);
 //void boolExp(struct node *T);
 //void Exp(struct node *T);
