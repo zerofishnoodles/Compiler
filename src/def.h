@@ -133,9 +133,9 @@ struct node *mknode(int kind,struct node *first,struct node *second, struct node
 void display(struct node *T, int indent);
 void DisplaySymbolTable();
 void build_symtable();
-int insert_symtable();
+int insert_symtable(struct symbol *tmp_symbol);
 struct symbol tmp_symbols[MAXPARAMNUM];
-//int Semantic_Analysis(struct node* T,int type,int level,char flag,int command);
+int Semantic_Analysis(struct node* T,int type,int level,char flag,int command);
 //void boolExp(struct node *T);
 //void Exp(struct node *T);
 //void objectCode(struct codenode *head);

@@ -284,7 +284,8 @@ void DisplaySymbolTable()
 
 int insert_symtable(struct symbol *tmp_symbol)
 {
-  // search symtable
+  // semantic analysis
+   
 
   // insert
   int index = symbolTable.index;
@@ -616,4 +617,9 @@ void build_symtable(struct node *T)
       break;
     }
   }
+}
+
+int Semantic_Analysis(struct node* T,int type,int level,char flag,int command)
+{
+
 }
