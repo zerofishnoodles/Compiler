@@ -45,7 +45,9 @@ enum node_kind
   SELF_ADD_EXP,
   SELF_MINUS_EXP,
   TERM,
-  ARRAYS
+  ARRAYS,
+  INIT_LIST,
+  ARRAY_DEC
 };
 
 
@@ -105,12 +107,12 @@ struct symbol
   char name[33];  //变量或函数名
   int level;      //层号，外部变量名或函数名层号为0，形参名为1，每到1个复合语句层号加1，退出减1
   int type;       //变量类型或函数返回值类型
-  int paramnum;   //形式参数个数
+  int paramnum;   //形式参数个数数组维度
   char alias[10]; //别名，为解决嵌套层次使用，使得每一个数据名称唯一
-  char flag;      //符号标记，函数：'F'  变量：'V'   参数：'P'  临时变量：'T' 数组变量：'A'
+  char flag;      //符号标记，函数：'F'  变量：'V'   参数：'P'  临时变量：'T' 数组变量：'A' 常量：'C'
   char offset;    //外部变量和局部变量在其静态数据区或活动记录中的偏移量
                   //或函数活动记录大小，目标代码生成时使用
-  int param_type[MAXPARAMNUM];   //记录函数形参类型
+  int param_type[MAXPARAMNUM];   //记录函数形参类型，数组各维度大小
   char fun_type[256]; //记录edu上函数类型的标准输出 后期可以去掉
   int cmd;  // 施加在该符号上的操作
   int pos; // 记录该符号的位置，方便报错
@@ -138,8 +140,10 @@ int insert_symtable(struct symbol *tmp_symbol);
 int search_symtable(char *name);
 struct symbol tmp_symbols[MAXPARAMNUM];
 int semantic_analysis(struct node* T);
-void semantic_error(int pos, char *msg1, char *msg2);
+void semantic_error(int pos, char *msg1, char *msg2, int flag);
 void term_help(struct node *T, int cmd);
 //void boolExp(struct node *T);
 void Exp(struct node *T);
+char last_error_line[256];  // 为了过educoder的sb测试设的
+int islooping;
 //void objectCode(struct codenode *head);

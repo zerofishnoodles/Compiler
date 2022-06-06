@@ -23,7 +23,7 @@ extern char filename[50];
 };
 
 //  %type 定义非终结符的语义值类型
-%type  <ptr> program ExtDefList ExtDef Specifier VoidType ExtDecList FuncDec CompSt VarList VarDec ParamDec Stmt StmDefList Def DecList Exp Args ForArgs ForArg Term Arrays
+%type  <ptr> program ExtDefList ExtDef Specifier VoidType ExtDecList FuncDec CompSt VarList VarDec ParamDec Stmt StmDefList Def DecList Exp Args ForArgs ForArg Term Arrays InitList
 
 //% token 定义终结符的语义值类型
 %token <type_int> INT           // 指定INT字面量的语义值是type_int，有词法分析得到的数值
@@ -48,7 +48,7 @@ extern char filename[50];
 %%
 
 /* 不再显示语法树；请添加适当的功能，遍历语法树，登记符号表，并在进入和退出作用域时，显示符号表的内容 */
-program: ExtDefList  {/*printf("CompUnit:\n"); display($1,3);*/ semantic_analysis($1);}
+program: ExtDefList  {/*printf("CompUnit:\n");*/ /*display($1,3);*/ semantic_analysis($1);}
          ;
 
 ExtDefList: {$$=NULL;}
@@ -78,8 +78,18 @@ Arrays: {$$=NULL;}
       | LB Exp RB Arrays {$$=mknode(ARRAYS,$2,$4,NULL,yylineno);}
       ;
 
+InitList:  {$$=NULL; }
+      | INT COMMA InitList{$$=mknode(INIT_LIST,$3,NULL,NULL,yylineno);$$->type_int=$1;$$->type=INT;}
+      | INT {$$=mknode(INT,NULL,NULL,NULL,yylineno);$$->type_int=$1;$$->type=INT;}
+      | FLOAT {$$=mknode(FLOAT,NULL,NULL,NULL,yylineno);$$->type_float=$1;$$->type=FLOAT;}
+      | FLOAT COMMA InitList{$$=mknode(INIT_LIST,$3,NULL,NULL,yylineno);$$->type_float=$1;$$->type=FLOAT;}
+      | LC InitList RC {$$=mknode(INIT_LIST,$2,NULL,NULL,yylineno);}
+      | LC InitList RC COMMA InitList{$$=mknode(INIT_LIST,$2,NULL,NULL,yylineno);}
+      ;
+
 VarDec: Term {$$=$1;}
       | ID ASSIGN Exp  {$$=mknode(VAR_DEC,$3,NULL,NULL,yylineno);strcpy($$->type_id,$1);}
+      | ID Arrays ASSIGN Exp {$$=mknode(ARRAY_DEC,$2,$4,NULL,yylineno);strcpy($$->type_id,$1);}  // 可能有冲突？
       ;
 
 FuncDec: ID LP VarList RP  {$$=mknode(FUNC_DEC,$3,NULL,NULL,yylineno);strcpy($$->type_id,$1);}  //函数名存放在$$->type_id
@@ -141,6 +151,7 @@ Exp: Exp ASSIGN Exp  {$$=mknode(ASSIGN,$1,$3,NULL,yylineno);strcpy($$->type_id,"
    | Term            {$$=$1;}
    | INT             {$$=mknode(INT,NULL,NULL,NULL,yylineno);$$->type_int=$1;$$->type=INT;}
    | FLOAT           {$$=mknode(FLOAT,NULL,NULL,NULL,yylineno);$$->type_float=$1;$$->type=FLOAT;}
+   | LC InitList RC  {$$=mknode(INIT_LIST,$2,NULL,NULL,yylineno);strcpy($$->type_id,"InitList");}
    ;
 
 Args: Exp COMMA Args  {$$=mknode(ARGS,$1,$3,NULL,yylineno);}
