@@ -2,8 +2,8 @@
 #include "stdlib.h"
 #include "string.h"
 #include "stdarg.h"
-// #include "sysy.tab.h"
-#include "parser.tab.h"
+#include "sysy.tab.h"
+// #include "parser.tab.h"
 
 enum node_kind
 {
@@ -107,11 +107,13 @@ struct symbol
   int type;       //变量类型或函数返回值类型
   int paramnum;   //形式参数个数
   char alias[10]; //别名，为解决嵌套层次使用，使得每一个数据名称唯一
-  char flag;      //符号标记，函数：'F'  变量：'V'   参数：'P'  临时变量：'T'
+  char flag;      //符号标记，函数：'F'  变量：'V'   参数：'P'  临时变量：'T' 数组变量：'A'
   char offset;    //外部变量和局部变量在其静态数据区或活动记录中的偏移量
                   //或函数活动记录大小，目标代码生成时使用
-  int param_type[MAXPARAMNUM];
-  char fun_type[256];
+  int param_type[MAXPARAMNUM];   //记录函数形参类型
+  char fun_type[256]; //记录edu上函数类型的标准输出 后期可以去掉
+  int cmd;  // 施加在该符号上的操作
+  int pos; // 记录该符号的位置，方便报错
   //其它...
 } ;
 
@@ -132,10 +134,12 @@ struct symbol_scope_begin
 struct node *mknode(int kind,struct node *first,struct node *second, struct node *third,int pos );
 void display(struct node *T, int indent);
 void DisplaySymbolTable();
-void build_symtable();
 int insert_symtable(struct symbol *tmp_symbol);
+int search_symtable(char *name);
 struct symbol tmp_symbols[MAXPARAMNUM];
-int Semantic_Analysis(struct node* T,int type,int level,char flag,int command);
+int semantic_analysis(struct node* T);
+void semantic_error(int pos, char *msg1, char *msg2);
+void term_help(struct node *T, int cmd);
 //void boolExp(struct node *T);
-//void Exp(struct node *T);
+void Exp(struct node *T);
 //void objectCode(struct codenode *head);

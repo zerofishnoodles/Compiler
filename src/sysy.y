@@ -48,7 +48,7 @@ extern char filename[50];
 %%
 
 /* 不再显示语法树；请添加适当的功能，遍历语法树，登记符号表，并在进入和退出作用域时，显示符号表的内容 */
-program: ExtDefList  {/*printf("CompUnit:\n"); display($1,3);*/ build_symtable($1);}
+program: ExtDefList  {/*printf("CompUnit:\n"); display($1,3);*/ semantic_analysis($1);}
          ;
 
 ExtDefList: {$$=NULL;}

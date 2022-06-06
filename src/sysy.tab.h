@@ -34,11 +34,11 @@
 /* Undocumented macros, especially those whose name start with YY_,
    are private implementation details.  Do not rely on them.  */
 
-#ifndef YY_YY_PARSER_TAB_H_INCLUDED
-# define YY_YY_PARSER_TAB_H_INCLUDED
+#ifndef YY_YY_SYSY_TAB_H_INCLUDED
+# define YY_YY_SYSY_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -53,34 +53,40 @@ extern int yydebug;
     ID = 259,
     RELOP = 260,
     TYPE = 261,
-    FLOAT = 262,
-    LP = 263,
-    RP = 264,
-    LC = 265,
-    RC = 266,
-    SEMI = 267,
-    COMMA = 268,
-    LB = 269,
-    RB = 270,
-    PLUS = 271,
-    MINUS = 272,
-    STAR = 273,
-    DIV = 274,
-    ASSIGNOP = 275,
-    AND = 276,
-    OR = 277,
-    NOT = 278,
-    IF = 279,
-    ELSE = 280,
-    WHILE = 281,
-    RETURN = 282,
-    CONTINUE = 283,
-    BREAK = 284,
-    MOD = 285,
-    FOR = 286,
-    INC = 287,
-    UMINUS = 288,
-    LOWER_THEN_ELSE = 289
+    VOID = 262,
+    FLOAT = 263,
+    CONST = 264,
+    RETURN = 265,
+    IF = 266,
+    ELSE = 267,
+    FOR = 268,
+    WHILE = 269,
+    DO = 270,
+    BREAK = 271,
+    CONTINUE = 272,
+    LP = 273,
+    RP = 274,
+    LB = 275,
+    RB = 276,
+    LC = 277,
+    RC = 278,
+    COMMA = 279,
+    SEMICOLON = 280,
+    QUESTION = 281,
+    COLON = 282,
+    NOT = 283,
+    ASSIGN = 284,
+    MINUS = 285,
+    ADD = 286,
+    MUL = 287,
+    DIV = 288,
+    MOD = 289,
+    AND = 290,
+    OR = 291,
+    UMINUS = 292,
+    SELF_ADD = 293,
+    SELF_MINUS = 294,
+    LOWER_THEN_ELSE = 295
   };
 #endif
 
@@ -88,14 +94,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 15 "sysy.y"
+#line 18 "sysy.y"
 
-	int    type_int;
-	float  type_float;
-	char   type_id[32];
-	struct node *ptr;
+  int    type_int;
+  float  type_float;
+  char   type_id[32];
+  struct node *ptr;
 
-#line 99 "parser.tab.h"
+#line 105 "sysy.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -122,4 +128,4 @@ extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
 int yyparse (void);
 
-#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_YY_SYSY_TAB_H_INCLUDED  */
