@@ -29,16 +29,22 @@ int insert_symtable(struct symbol *tmp_symbol)
 {
   // search_symtable
   int i = search_symtable(tmp_symbol->name);
-  int cur_lev = lev;   // 给形参的特判 因为形参还没到复合语句内，但是处于下一层 我知道这代码写的像shi。。。别骂了
-  if(tmp_symbol->flag == 'P') cur_lev++;
-  if(i != -1 && symbolTable.symbols[i].level == cur_lev) {
-    if(symbolTable.symbols[i].flag != tmp_symbol->flag){
-      semantic_error(tmp_symbol->pos, tmp_symbol->name, " redeclared as different kind of symbol",0);
+  int cur_lev = lev; // 给形参的特判 因为形参还没到复合语句内，但是处于下一层 我知道这代码写的像shi。。。别骂了
+  if (tmp_symbol->flag == 'P')
+    cur_lev++;
+  if (i != -1 && symbolTable.symbols[i].level == cur_lev)
+  {
+    if (symbolTable.symbols[i].flag != tmp_symbol->flag)
+    {
+      semantic_error(tmp_symbol->pos, tmp_symbol->name, " redeclared as different kind of symbol", 0);
     }
-    else if(symbolTable.symbols[i].type != tmp_symbol->type){
-      semantic_error(tmp_symbol->pos, "conflicting types for", tmp_symbol->name,1);
-    }else{
-      semantic_error(tmp_symbol->pos, "redefinition of", tmp_symbol->name,1);
+    else if (symbolTable.symbols[i].type != tmp_symbol->type)
+    {
+      semantic_error(tmp_symbol->pos, "conflicting types for", tmp_symbol->name, 1);
+    }
+    else
+    {
+      semantic_error(tmp_symbol->pos, "redefinition of", tmp_symbol->name, 1);
     }
 
     return 0;
@@ -76,7 +82,7 @@ int insert_symtable(struct symbol *tmp_symbol)
     strcpy(symbolTable.symbols[index].fun_type, type);
   }
   symbolTable.index++;
-//   DisplaySymbolTable();
+  //   DisplaySymbolTable();
   return 1;
 }
 
@@ -85,10 +91,10 @@ int search_symtable(char *name)
   int i, flag = 0;
   for (i = symbolTable.index - 1; i >= 0; i--)
   {
-      // if (symbolTable.symbols[i].level == 0)
-      //   flag = 1;
-      // if (flag && symbolTable.symbols[i].level == 1)
-      //   continue; //跳过前面函数的形式参数表项
+    // if (symbolTable.symbols[i].level == 0)
+    //   flag = 1;
+    // if (flag && symbolTable.symbols[i].level == 1)
+    //   continue; //跳过前面函数的形式参数表项
     if (!strcmp(symbolTable.symbols[i].name, name))
       return i;
   }

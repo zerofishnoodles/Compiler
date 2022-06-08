@@ -17,11 +17,11 @@ int semantic_analysis(struct node *T)
       semantic_analysis(T->ptr[1]); //显示该外部定义列表中的其它外部定义
       break;
     case EXT_VAR_DEF:
-	tmp_symbols[0].cmd = EXT_VAR_DEF;
+      tmp_symbols[0].cmd = EXT_VAR_DEF;
       // printf("%*c外部变量定义:\n", indent, ' ');
       semantic_analysis(T->ptr[0]); //显示外部变量类型
       // printf("%*c定义的变量:\n", indent + 3, ' ');
-	// printf("%d\n", T->ptr[1]->kind);
+      // printf("%d\n", T->ptr[1]->kind);
       semantic_analysis(T->ptr[1]); //显示变量列表
       if (T->ptr[1]->kind == TERM || T->ptr[1]->kind == VAR_DEC || T->ptr[1]->kind == ARRAY_DEC)
       {
@@ -48,7 +48,7 @@ int semantic_analysis(struct node *T)
       // if(T->ptr[0] && tmp_symbols[0].cmd == ASSIGN){
       //     tmp_symbols[0].cmd = ARRAYS;
       // }
-	// printf("cmd: %d\n", tmp_symbols[0].cmd);
+      // printf("cmd: %d\n", tmp_symbols[0].cmd);
       term_help(T, tmp_symbols[0].cmd);
       // if (T->ptr[0])
       // {
@@ -74,34 +74,42 @@ int semantic_analysis(struct node *T)
       // }
       semantic_analysis(T->ptr[0]);
       break;
-    case ARRAYS:  // 对维度处理
-      if(T != NULL && tmp_symbols[0].cmd == ARRAY_DEC ){
+    case ARRAYS: // 对维度处理
+      if (T != NULL && tmp_symbols[0].cmd == ARRAY_DEC)
+      {
         tmp_symbols[0].flag = 'A';
       }
-      if(tmp_symbols[0].cmd == ARRAY_DEC) {
+      if (tmp_symbols[0].cmd == ARRAY_DEC)
+      {
         T0 = T;
         i = 0;
         while (T0 != NULL)
         {
           // printf("%*c第%d维: \n", indent, ' ', i++);
           // semantic_analysis(T0->ptr[0]);
-          if(T0->ptr[0]->type != INT){
-            semantic_error(T0->pos, " array subscript is not an integer", "",2);
-          }else{
+          if (T0->ptr[0]->type != INT)
+          {
+            semantic_error(T0->pos, " array subscript is not an integer", "", 2);
+          }
+          else
+          {
             tmp_symbols[0].param_type[i] = T0->ptr[0]->type_int;
           }
           T0 = T0->ptr[1];
           i++;
         }
         tmp_symbols[0].paramnum = i;
-      }else if(tmp_symbols[0].cmd == ASSIGN) {
+      }
+      else if (tmp_symbols[0].cmd == ASSIGN)
+      {
         T0 = T;
         while (T0 != NULL)
         {
           // printf("%*c第%d维: \n", indent, ' ', i++);
           // semantic_analysis(T0->ptr[0]);
-          if(T0->ptr[0]->type != INT){  
-            semantic_error(T0->pos, " array subscript is not an integer", "",2);
+          if (T0->ptr[0]->type != INT)
+          {
+            semantic_error(T0->pos, " array subscript is not an integer", "", 2);
           }
           T0 = T0->ptr[1];
         }
@@ -114,7 +122,8 @@ int semantic_analysis(struct node *T)
       break;
     case EXT_DEC_LIST:
       tmp_symbols[0].flag = 'V';
-      if(tmp_symbols[0].cmd == EXT_CONST_VAR_DEF) tmp_symbols[0].flag = 'C';
+      if (tmp_symbols[0].cmd == EXT_CONST_VAR_DEF)
+        tmp_symbols[0].flag = 'C';
       semantic_analysis(T->ptr[0]); //依次显示外部变量名，
       insert_symtable(&tmp_symbols[0]);
       // memset(&tmp_symbols[0], 0, sizeof(struct symbol));
@@ -125,8 +134,9 @@ int semantic_analysis(struct node *T)
       // printf("%*c变量名: %s\n", indent, ' ', T->type_id);
       tmp_symbols[0].pos = T->pos;
       strcpy(tmp_symbols[0].name, T->type_id);
-	tmp_symbols[0].flag = 'V';
-      if(tmp_symbols[0].cmd == EXT_CONST_VAR_DEF) tmp_symbols[0].flag = 'C';
+      tmp_symbols[0].flag = 'V';
+      if (tmp_symbols[0].cmd == EXT_CONST_VAR_DEF)
+        tmp_symbols[0].flag = 'C';
       if (T->ptr[0])
       {
         // printf("%*c它的初值:\n", indent + 3, ' ');
@@ -137,7 +147,8 @@ int semantic_analysis(struct node *T)
     case ARRAY_DEC:
       tmp_symbols[0].pos = T->pos;
       strcpy(tmp_symbols[0].name, T->type_id);
-      if (T->ptr[1]){
+      if (T->ptr[1])
+      {
         tmp_symbols[0].cmd = ARRAY_DEC;
         semantic_analysis(T->ptr[0]); // 维度
         semantic_analysis(T->ptr[1]); // 初值
@@ -164,7 +175,7 @@ int semantic_analysis(struct node *T)
       // printf("%*c函数名: %s\n", indent, ' ', T->type_id);
       tmp_symbols[0].pos = T->pos;
       strcpy(tmp_symbols[0].name, T->type_id);
-	tmp_symbols[0].paramnum = 0;
+      tmp_symbols[0].paramnum = 0;
       if (T->ptr[0])
       {
         // printf("%*c函数形参: \n", indent, ' ');
@@ -202,24 +213,29 @@ int semantic_analysis(struct node *T)
       // {
       //   printf("%*c空返回语句\n", indent, ' ');
       // }
-      for(i = symbolTable.index-1; i>=0; i--){
-        if(symbolTable.symbols[i].flag == 'F') break;
+      for (i = symbolTable.index - 1; i >= 0; i--)
+      {
+        if (symbolTable.symbols[i].flag == 'F')
+          break;
       }
-      if(symbolTable.symbols[i].type == VOID){
-        semantic_error(T->pos, " ‘return’ with a value, in function returning void", "",2);
+      if (symbolTable.symbols[i].type == VOID)
+      {
+        semantic_error(T->pos, " ‘return’ with a value, in function returning void", "", 2);
       }
       break;
     case CONTINUE_STMT:
       // printf("%*c继续语句\n", indent, ' ');
-	if(islooping == 0){
-		semantic_error(T->pos, " continue statement not within a loop", "",2);
-	}
+      if (islooping == 0)
+      {
+        semantic_error(T->pos, " continue statement not within a loop", "", 2);
+      }
       break;
     case BREAK_STMT:
       // printf("%*c打断语句\n", indent, ' ');
-	if(islooping == 0){
-		semantic_error(T->pos, " break statement not within a loop", "",2);
-	}
+      if (islooping == 0)
+      {
+        semantic_error(T->pos, " break statement not within a loop", "", 2);
+      }
       break;
     case COMP_STM:
       lev++;
@@ -250,8 +266,8 @@ int semantic_analysis(struct node *T)
       symbol_scope_TX.top--;
       lev--;
       if (temp != symbolTable.index)
-      //   DisplaySymbolTable();
-      break;
+        //   DisplaySymbolTable();
+        break;
     case STM_DEF_LIST:
       semantic_analysis(T->ptr[0]); //显示第一条语句
       semantic_analysis(T->ptr[1]); //显示剩下语句
@@ -261,17 +277,17 @@ int semantic_analysis(struct node *T)
       // printf("%*c循环条件: \n", indent + 3, ' ');
       // display(T->ptr[0], indent + 6); //显示循环条件
       // printf("%*c循环体: \n", indent + 3, ' ');
-	islooping = 1;
+      islooping = 1;
       semantic_analysis(T->ptr[1]); //显示循环体
-	islooping = 0;
+      islooping = 0;
       break;
     case FOR_STMT:
       // printf("%*cfor 循环语句: \n", indent, ' ');
       // semantic_analysis(T->ptr[0]);
       // printf("%*c循环体: \n", indent + 3, ' ');
-	islooping = 1;
+      islooping = 1;
       semantic_analysis(T->ptr[1]);
-	islooping = 0;
+      islooping = 0;
       break;
     case FOR_ARGS:
       // printf("%*cfor 循环起始表达式: \n", indent, ' ');
@@ -326,7 +342,7 @@ int semantic_analysis(struct node *T)
       // DisplaySymbolTable();
       break;
     case DEC_LIST:
-	tmp_symbols[0].cmd = DEC_LIST;
+      tmp_symbols[0].cmd = DEC_LIST;
       tmp_symbols[0].flag = 'V';
       semantic_analysis(T->ptr[0]);
       insert_symtable(&tmp_symbols[0]);
@@ -390,31 +406,39 @@ int semantic_analysis(struct node *T)
       // printf("%*c函数调用: \n", indent, ' ');
       // printf("%*c函数名: %s\n", indent + 3, ' ', T->type_id);
       i = search_symtable(T->type_id);
-      if(i == -1){
-        semantic_error(T->pos, T->type_id, " undeclared",0);
-      }else if(symbolTable.symbols[i].flag != 'F'){
-        semantic_error(T->pos, T->type_id, " is not a function",0);
-      }else{
+      if (i == -1)
+      {
+        semantic_error(T->pos, T->type_id, " undeclared", 0);
+      }
+      else if (symbolTable.symbols[i].flag != 'F')
+      {
+        semantic_error(T->pos, T->type_id, " is not a function", 0);
+      }
+      else
+      {
         temp = semantic_analysis(T->ptr[0]);
-        if(temp < symbolTable.symbols[i].paramnum){
-          semantic_error(T->pos, "too few arguments to function", T->type_id,1);
-        }else if(temp > symbolTable.symbols[i].paramnum){
-          semantic_error(T->pos, "too many arguments to function", T->type_id,1);
+        if (temp < symbolTable.symbols[i].paramnum)
+        {
+          semantic_error(T->pos, "too few arguments to function", T->type_id, 1);
+        }
+        else if (temp > symbolTable.symbols[i].paramnum)
+        {
+          semantic_error(T->pos, "too many arguments to function", T->type_id, 1);
         }
       }
 
       break;
     case ARGS:
-        i = 0;
-        while (T)
-        { // ARGS表示实际参数表达式序列结点，其第一棵子树为其一个实际参数表达式，第二棵子树为剩下的。
-          i++;
-          struct node *T0 = T->ptr[0];
-          // printf("%*c第%d个实际参数表达式: \n", indent, ' ', i++);
-          // display(T0, indent + 3);
-          T = T->ptr[1];
-        }
-        return i;
+      i = 0;
+      while (T)
+      { // ARGS表示实际参数表达式序列结点，其第一棵子树为其一个实际参数表达式，第二棵子树为剩下的。
+        i++;
+        struct node *T0 = T->ptr[0];
+        // printf("%*c第%d个实际参数表达式: \n", indent, ' ', i++);
+        // display(T0, indent + 3);
+        T = T->ptr[1];
+      }
+      return i;
       break;
     case SELF_ADD_EXP:
       // printf("%*c后置自增: \n", indent, ' ');
@@ -427,38 +451,47 @@ int semantic_analysis(struct node *T)
     case INIT_LIST:
       i = 0;
       struct node *T0 = T->ptr[0];
-      while(T0){
-        if (T0->kind == INIT_LIST && T0->type != INT && T0->type != FLOAT){
+      while (T0)
+      {
+        if (T0->kind == INIT_LIST && T0->type != INT && T0->type != FLOAT)
+        {
           i++;
-        }else if((T0->type^tmp_symbols[0].type) != 0){
-          semantic_error(T0->pos, "conflicting init types for", tmp_symbols[0].name,1);  
+        }
+        else if ((T0->type ^ tmp_symbols[0].type) != 0)
+        {
+          semantic_error(T0->pos, "conflicting init types for", tmp_symbols[0].name, 1);
         }
         T0 = T0->ptr[0];
       }
       // 没有处理维度error
     }
-
   }
 }
 
-
 void semantic_error(int pos, char *msg1, char *msg2, int flag)
-{	
-	char buf[256];
-	if(flag == 0){  //前面打‘’
-		sprintf(buf, "%s:%d ‘%s’%s\n", filename, pos, msg1, msg2);
-	}else if(flag==1){ //后面打‘’
-		sprintf(buf, "%s:%d %s ‘%s’\n", filename, pos, msg1, msg2);
-	}else{  // 不打
-		sprintf(buf, "%s:%d%s%s\n", filename, pos, msg1, msg2);
-	}
-	if(strcmp(buf, last_error_line) == 0) return;
-	else if(strcmp("putint", msg1) == 0) return;
-	else{
-		printf("%s", buf);
-		strcpy(last_error_line, buf);
-	}
-  
+{
+  char buf[256];
+  if (flag == 0)
+  { //前面打‘’
+    sprintf(buf, "%s:%d ‘%s’%s\n", filename, pos, msg1, msg2);
+  }
+  else if (flag == 1)
+  { //后面打‘’
+    sprintf(buf, "%s:%d %s ‘%s’\n", filename, pos, msg1, msg2);
+  }
+  else
+  { // 不打
+    sprintf(buf, "%s:%d%s%s\n", filename, pos, msg1, msg2);
+  }
+  if (strcmp(buf, last_error_line) == 0)
+    return;
+  else if (strcmp("putint", msg1) == 0)
+    return;
+  else
+  {
+    printf("%s", buf);
+    strcpy(last_error_line, buf);
+  }
 }
 
 void term_help(struct node *T, int cmd)
@@ -468,53 +501,76 @@ void term_help(struct node *T, int cmd)
   switch (cmd)
   {
   case ASSIGN:
-    if(i == -1){
-      semantic_error(T->pos, T->type_id, " undeclared", 0);  // 不考虑类型转换
-    }else if(symbolTable.symbols[i].flag == 'F'){
+    if (i == -1)
+    {
+      semantic_error(T->pos, T->type_id, " undeclared", 0); // 不考虑类型转换
+    }
+    else if (symbolTable.symbols[i].flag == 'F')
+    {
       semantic_error(T->pos, " lvalue required as left operand of assignment", "", 2);
-    }else if(symbolTable.symbols[i].flag == 'A' && T->ptr[0] == NULL){
-      semantic_error(T->pos, " assignment to expression with array type","",2);
+    }
+    else if (symbolTable.symbols[i].flag == 'A' && T->ptr[0] == NULL)
+    {
+      semantic_error(T->pos, " assignment to expression with array type", "", 2);
     }
     break;
   case VAR_DEC:
-    if(i == -1){
-      semantic_error(T->pos, T->type_id, " undeclared", 0);  // 不考虑类型转换
-    }else if(T->ptr[0]!=NULL && symbolTable.symbols[i].flag != 'A'){
-	semantic_error(T->pos, " subscripted value is not an array", "", 2);
+    if (i == -1)
+    {
+      semantic_error(T->pos, T->type_id, " undeclared", 0); // 不考虑类型转换
+    }
+    else if (T->ptr[0] != NULL && symbolTable.symbols[i].flag != 'A')
+    {
+      semantic_error(T->pos, " subscripted value is not an array", "", 2);
     }
     break;
   case ADD:
-    if(i == -1){
-      semantic_error(T->pos, T->type_id, " undeclared",0);  // 不考虑类型转换
-    }else if(symbolTable.symbols[i].flag == 'F'){
+    if (i == -1)
+    {
+      semantic_error(T->pos, T->type_id, " undeclared", 0); // 不考虑类型转换
+    }
+    else if (symbolTable.symbols[i].flag == 'F')
+    {
       semantic_error(T->pos, " invalid operands to binary operator ", "+", 2);
     }
     break;
   case MINUS:
-    if(i == -1){
-      semantic_error(T->pos, T->type_id, " undeclared", 0);  // 不考虑类型转换
-    }else if(symbolTable.symbols[i].flag == 'F'){
-      semantic_error(T->pos, " invalid operands to binary operator ", "-",2);
+    if (i == -1)
+    {
+      semantic_error(T->pos, T->type_id, " undeclared", 0); // 不考虑类型转换
+    }
+    else if (symbolTable.symbols[i].flag == 'F')
+    {
+      semantic_error(T->pos, " invalid operands to binary operator ", "-", 2);
     }
     break;
   case MUL:
-    if(i == -1){
-      semantic_error(T->pos, T->type_id, " undeclared", 0);  // 不考虑类型转换
-    }else if(symbolTable.symbols[i].flag == 'F'){
+    if (i == -1)
+    {
+      semantic_error(T->pos, T->type_id, " undeclared", 0); // 不考虑类型转换
+    }
+    else if (symbolTable.symbols[i].flag == 'F')
+    {
       semantic_error(T->pos, " invalid operands to binary operator ", "*", 2);
     }
     break;
   case DIV:
-    if(i == -1){
-      semantic_error(T->pos, T->type_id, " undeclared", 0);  // 不考虑类型转换
-    }else if(symbolTable.symbols[i].flag == 'F'){
-      semantic_error(T->pos, " invalid operands to binary operator ", "/",2);
+    if (i == -1)
+    {
+      semantic_error(T->pos, T->type_id, " undeclared", 0); // 不考虑类型转换
+    }
+    else if (symbolTable.symbols[i].flag == 'F')
+    {
+      semantic_error(T->pos, " invalid operands to binary operator ", "/", 2);
     }
     break;
   case MOD:
-    if(i == -1){
-      semantic_error(T->pos, T->type_id, " undeclared", 0);  // 不考虑类型转换
-    }else if(symbolTable.symbols[i].flag == 'F'){
+    if (i == -1)
+    {
+      semantic_error(T->pos, T->type_id, " undeclared", 0); // 不考虑类型转换
+    }
+    else if (symbolTable.symbols[i].flag == 'F')
+    {
       semantic_error(T->pos, " invalid operands to binary operator ", "%", 2);
     }
     break;
@@ -526,7 +582,7 @@ void term_help(struct node *T, int cmd)
     tmp_symbols[0].flag = 'V';
     strcpy(tmp_symbols[0].name, T->type_id);
     tmp_symbols[0].pos = T->pos;
-    tmp_symbols[0].cmd = ARRAY_DEC;  
+    tmp_symbols[0].cmd = ARRAY_DEC;
     break;
   }
 }

@@ -254,8 +254,8 @@ void display(struct node *T, int indent)
       printf("%*c变量: %s\n", indent + 3, ' ', T->type_id);
       break;
     case INIT_LIST:
-      display(T->ptr[0], indent+3);
-      display(T->ptr[0], indent+3);
+      display(T->ptr[0], indent + 3);
+      display(T->ptr[0], indent + 3);
       break;
     }
   }
