@@ -100,6 +100,7 @@ struct node
   int pos;    //语法单位所在位置行号
   int offset; //偏移量
   int width;  //各种数据占用的字节数
+  int num;
 };
 
 struct symbol
@@ -142,8 +143,14 @@ struct symbol tmp_symbols[MAXPARAMNUM];
 int semantic_analysis(struct node* T);
 void semantic_error(int pos, char *msg1, char *msg2, int flag);
 void term_help(struct node *T, int cmd);
-//void boolExp(struct node *T);
+void boolExp(struct node *T);
 void Exp(struct node *T);
 char last_error_line[256];  // 为了过educoder的sb测试设的
 int islooping;
+void generate_IR0(struct node *T);
+void generate_IR(struct node *T);
+int fillSymbolTable(char *name,char *alias,int level,int type,char flag,int offset);
+int fill_Temp(char *name,int level,int type,char flag,int offset);
+int searchSymbolTable(char *name);
+void prn_symbol();
 //void objectCode(struct codenode *head);
