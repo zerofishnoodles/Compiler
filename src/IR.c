@@ -105,18 +105,19 @@ void printIR(struct codenode *head)
         case ASSIGN:
             printf("\t%s = %s\n", resultstr, opnstr1);
             break;
-	  case ARRAYS:
-	  	printf("\t%s[%s] = %s\n", resultstr, opnstr2, opnstr1);
-		  break;
+        case ARRAYS:
+            printf("\t%s[%s] = %s\n", resultstr, opnstr2, opnstr1);
+            break;
         case ADD:
         case MINUS:
         case MUL:
         case DIV:
-	  case MOD:
+        case MOD:
             printf("\t%s = %s %c %s\n", resultstr, opnstr1,
                    h->op == ADD ? '+' : h->op == MINUS ? '-'
                                     : h->op == MUL     ? '*'
-                                    : h->op == DIV  ? '/': '%',
+                                    : h->op == DIV     ? '/'
+                                                       : '%',
                    opnstr2);
             break;
         case FUNCTION:
@@ -249,31 +250,36 @@ void boolExp(struct node *T)
     }
 }
 
-int  match_param(int i,struct node *T){
-    int j,num=symbolTable.symbols[i].paramnum;
-    int type1,type2,pos=T->pos;
-    T=T->ptr[0];
-    if (num==0 && T==NULL) return 1;
-    for (j=1;j<=num;j++) {
-        if (!T){
+int match_param(int i, struct node *T)
+{
+    int j, num = symbolTable.symbols[i].paramnum;
+    int type1, type2, pos = T->pos;
+    T = T->ptr[0];
+    if (num == 0 && T == NULL)
+        return 1;
+    for (j = 1; j <= num; j++)
+    {
+        if (!T)
+        {
             // semantic_error(pos,"", "函数调用参数太少!");
             return 0;
-            }
-        type1=symbolTable.symbols[i+j].type;  //形参类型
-        type2=T->ptr[0]->type;
-        if (type1!=type2){
+        }
+        type1 = symbolTable.symbols[i + j].type; //形参类型
+        type2 = T->ptr[0]->type;
+        if (type1 != type2)
+        {
             // semantic_error(pos,"", "参数类型不匹配");
             return 0;
         }
-        T=T->ptr[1];
+        T = T->ptr[1];
     }
-    if (T){ //num个参数已经匹配完，还有实参表达式
+    if (T)
+    { // num个参数已经匹配完，还有实参表达式
         // semantic_error(pos,"", "函数调用参数太多!");
         return 0;
-        }
-    return 1;
     }
-
+    return 1;
+}
 
 void Exp(struct node *T)
 { //处理基本表达式，参考文献[2]p82的思想
@@ -303,17 +309,16 @@ void Exp(struct node *T)
                 T0 = T->ptr[0];
                 int i = 0;
                 width = T->type == INT ? 4 : 8;
-                int off =  1;  // 计算数组寻址
-                while(i < symbolTable.symbols[rtn].paramnum) {  
+                int off = 1; // 计算数组寻址
+                while (i < symbolTable.symbols[rtn].paramnum)
+                {
                     off *= symbolTable.symbols[rtn].param_type[i];
                     i++;
                 }
 
-                
-
                 i = 0;
                 char temp_name[33];
-		    int rtn_t;
+                int rtn_t;
                 while (T0)
                 {
                     // 这里的变量没有放进符号表中
@@ -324,17 +329,17 @@ void Exp(struct node *T)
                     strcpy(result.id, newTemp());
                     T0->code = genIR(ASSIGN, opn1, opn2, result);
 
-
                     opn1.kind = ID;
-			  rtn_t = searchSymbolTable(T0->ptr[0]->type_id);
-                    strcpy(opn1.id ,symbolTable.symbols[rtn_t].alias );
+                    rtn_t = searchSymbolTable(T0->ptr[0]->type_id);
+                    strcpy(opn1.id, symbolTable.symbols[rtn_t].alias);
                     opn2.kind = ID;
                     strcpy(opn2.id, result.id);
                     result.kind = ID;
                     strcpy(result.id, newTemp());
                     T0->code = merge(2, T0->code, genIR(MUL, opn1, opn2, result));
 
-                    if(i >= 1){
+                    if (i >= 1)
+                    {
                         opn1.kind = ID;
                         strcpy(opn1.id, temp_name);
                         opn2.kind = ID;
@@ -347,11 +352,10 @@ void Exp(struct node *T)
 
                     T->code = merge(2, T->code, T0->code);
 
-
                     T0 = T0->ptr[1];
                     i++;
                 }
-		    T->place = fill_Temp(result.id, lev, INT, 'T', T->offset);  // offset有问题
+                T->place = fill_Temp(result.id, lev, INT, 'T', T->offset); // offset有问题
             }
             else
             {
@@ -403,21 +407,23 @@ void Exp(struct node *T)
                 strcpy(opn1.id, symbolTable.symbols[T->ptr[1]->place].alias); //右值一定是个变量或临时变量
                 opn1.offset = symbolTable.symbols[T->ptr[1]->place].offset;
 
-			
-		    rtn = searchSymbolTable(T->ptr[0]->type_id);
-		    if(symbolTable.symbols[rtn].flag == 'V'){
-			result.kind = ID;
-			strcpy(result.id, symbolTable.symbols[T->ptr[0]->place].alias);
-			result.offset = symbolTable.symbols[T->ptr[0]->place].offset;
-			T->code = merge(2, T->code, genIR(ASSIGN, opn1, opn2, result));
-		    }else if(symbolTable.symbols[rtn].flag == 'A'){
-			opn2.kind = ID;
-			strcpy(opn2.id, symbolTable.symbols[T->ptr[0]->place].alias);
-			opn2.offset = symbolTable.symbols[T->ptr[0]->place].offset;
-			result.kind = ID;
-			strcpy(result.id, symbolTable.symbols[rtn].alias);
-			T->code = merge(2, T->code, genIR(ARRAYS, opn1, opn2, result));
-		    }
+                rtn = searchSymbolTable(T->ptr[0]->type_id);
+                if (symbolTable.symbols[rtn].flag == 'V')
+                {
+                    result.kind = ID;
+                    strcpy(result.id, symbolTable.symbols[T->ptr[0]->place].alias);
+                    result.offset = symbolTable.symbols[T->ptr[0]->place].offset;
+                    T->code = merge(2, T->code, genIR(ASSIGN, opn1, opn2, result));
+                }
+                else if (symbolTable.symbols[rtn].flag == 'A')
+                {
+                    opn2.kind = ID;
+                    strcpy(opn2.id, symbolTable.symbols[T->ptr[0]->place].alias);
+                    opn2.offset = symbolTable.symbols[T->ptr[0]->place].offset;
+                    result.kind = ID;
+                    strcpy(result.id, symbolTable.symbols[rtn].alias);
+                    T->code = merge(2, T->code, genIR(ARRAYS, opn1, opn2, result));
+                }
             }
             break;
         case AND:   //按算术表达式方式计算布尔值，未写完
@@ -432,7 +438,7 @@ void Exp(struct node *T)
         case MINUS:
         case MUL:
         case DIV:
-	  case MOD:
+        case MOD:
             T->ptr[0]->offset = T->offset;
             Exp(T->ptr[0]);
             T->ptr[1]->offset = T->offset + T->ptr[0]->width;
@@ -543,8 +549,10 @@ void ext_var_list(struct node *T)
         break;
     case TERM:
         rtn = fillSymbolTable(T->type_id, newAlias(), lev, T->type, 'V', T->offset); //最后一个变量名
-        if (rtn == -1){}
-            // semantic_error(T->pos, T->type_id, "变量重复定义");
+        if (rtn == -1)
+        {
+        }
+        // semantic_error(T->pos, T->type_id, "变量重复定义");
         else
             T->place = rtn;
         T->num = 1;
@@ -639,7 +647,7 @@ void generate_IR(struct node *T)
             }
             break;
         case PARAM_DEC:
-            rtn = fillSymbolTable(T->ptr[1]->type_id, newAlias(), 1, T->ptr[0]->type, 'P', T->offset);  // 默认函数不嵌套
+            rtn = fillSymbolTable(T->ptr[1]->type_id, newAlias(), 1, T->ptr[0]->type, 'P', T->offset); // 默认函数不嵌套
             if (rtn == -1)
             {
             }
@@ -674,11 +682,12 @@ void generate_IR(struct node *T)
             //     T->width += T->ptr[1]->width;
             //     T->code = merge(2, T->code, T->ptr[1]->code);
             // }
-            if(T->ptr[0]) {   // def/stmt
+            if (T->ptr[0])
+            { // def/stmt
                 T->ptr[0]->offset = T->offset;
-		    strcpy(T->ptr[0]->Snext, T->Snext);
-		    strcpy(T->ptr[0]->Etrue, T->Etrue);
-		    strcpy(T->ptr[0]->Efalse, T->Efalse);
+                strcpy(T->ptr[0]->Snext, T->Snext);
+                strcpy(T->ptr[0]->Etrue, T->Etrue);
+                strcpy(T->ptr[0]->Efalse, T->Efalse);
                 generate_IR(T->ptr[0]);
                 T->width += T->ptr[0]->width;
                 T->code = T->ptr[0]->code;
@@ -690,7 +699,7 @@ void generate_IR(struct node *T)
             lev--;                                                         //出复合语句，层号减1
             symbolTable.index = symbol_scope_TX.TX[--symbol_scope_TX.top]; //删除该作用域中的符号
             break;
-        
+
         case DEC_LIST:
             T->code = NULL;
             if (T->ptr[0])
@@ -727,13 +736,14 @@ void generate_IR(struct node *T)
                 T0->ptr[0]->offset = T0->offset; //类型属性向下传递
                 if (T0->ptr[1])
                     T0->ptr[1]->offset = T0->offset + width;
-            if (T0->ptr[0]->kind == TERM)
+                if (T0->ptr[0]->kind == TERM)
                 {
-                    if(T0->ptr[0]->ptr[0])  //数组
-                    {  
+                    if (T0->ptr[0]->ptr[0]) //数组
+                    {
                         rtn = fillSymbolTable(T0->ptr[0]->type_id, newAlias(), lev, T0->ptr[0]->type, 'A', T->offset + T->width); //此处偏移量未计算，暂时为0
                     }
-                    else{
+                    else
+                    {
                         rtn = fillSymbolTable(T0->ptr[0]->type_id, newAlias(), lev, T0->ptr[0]->type, 'V', T->offset + T->width); //此处偏移量未计算，暂时为0
                     }
                     if (rtn == -1)
@@ -742,21 +752,22 @@ void generate_IR(struct node *T)
                     // semantic_error(T0->ptr[0]->pos,T0->ptr[0]->type_id, "变量重复定义");
                     else
                         T0->ptr[0]->place = rtn;
-                    if(T0->ptr[0]->ptr[0])  //数组
+                    if (T0->ptr[0]->ptr[0]) //数组
                     {
                         struct node *temp = T0->ptr[0]->ptr[0];
                         int total_num = 1;
-                        while(temp) {
+                        while (temp)
+                        {
                             total_num *= temp->ptr[0]->type_int;
                             int i = symbolTable.symbols[rtn].paramnum;
                             symbolTable.symbols[rtn].param_type[i] = temp->ptr[0]->type_int;
                             symbolTable.symbols[rtn].paramnum++;
                             temp = temp->ptr[1];
-
                         }
-                        T->width += width*total_num;
+                        T->width += width * total_num;
                     }
-                    else {
+                    else
+                    {
                         T->width += width;
                     }
                 }
@@ -792,14 +803,14 @@ void generate_IR(struct node *T)
             }              //空语句序列
             if (T->ptr[1]) // 2条以上语句连接，生成新标号作为第一条语句结束后到达的位置
                 strcpy(T->ptr[0]->Snext, newLabel());
-		// strcpy(T->ptr[0]->Snext, T->Snext);
+            // strcpy(T->ptr[0]->Snext, T->Snext);
             else //语句序列仅有一条语句，S.next属性向下传递
-		{
+            {
                 strcpy(T->ptr[0]->Snext, T->Snext);
-		}
+            }
 
-		strcpy(T->ptr[0]->Etrue, T->Etrue);
-		strcpy(T->ptr[0]->Efalse, T->Efalse);
+            strcpy(T->ptr[0]->Etrue, T->Etrue);
+            strcpy(T->ptr[0]->Efalse, T->Efalse);
             T->ptr[0]->offset = T->offset;
             generate_IR(T->ptr[0]);
             T->code = T->ptr[0]->code;
@@ -808,20 +819,20 @@ void generate_IR(struct node *T)
             if (T->ptr[1])
             { // 2条以上语句连接,S.next属性向下传递
                 strcpy(T->ptr[1]->Snext, T->Snext);
-			strcpy(T->ptr[1]->Etrue, T->Etrue);
-		    strcpy(T->ptr[1]->Efalse, T->Efalse);
-            //     T->ptr[1]->offset = T->offset; //顺序结构共享单元方式
-                                                                T->ptr[1]->offset=T->offset+T->ptr[0]->width; //顺序结构顺序分配单元方式
+                strcpy(T->ptr[1]->Etrue, T->Etrue);
+                strcpy(T->ptr[1]->Efalse, T->Efalse);
+                //     T->ptr[1]->offset = T->offset; //顺序结构共享单元方式
+                T->ptr[1]->offset = T->offset + T->ptr[0]->width; //顺序结构顺序分配单元方式
                 generate_IR(T->ptr[1]);
                 //序列中第1条为表达式语句，返回语句，复合语句时，第2条前不需要标号???
                 if (T->ptr[0]->kind == RETURN || T->ptr[0]->kind == EXP_STMT || T->ptr[0]->kind == COMP_STM)
                     T->code = merge(2, T->code, T->ptr[1]->code);
                 else
-                  //   T->code = merge(3, T->code, genLabel(T->ptr[0]->Snext), T->ptr[1]->code);
-			T->code = merge(2, T->code, T->ptr[1]->code);
+                    //   T->code = merge(3, T->code, genLabel(T->ptr[0]->Snext), T->ptr[1]->code);
+                    T->code = merge(2, T->code, T->ptr[1]->code);
                 if (T->ptr[1]->width > T->width)
-                  //   T->width = T->ptr[1]->width; //顺序结构共享单元方式
-                                                                        T->width+=T->ptr[1]->width;//顺序结构顺序分配单元方式
+                    //   T->width = T->ptr[1]->width; //顺序结构共享单元方式
+                    T->width += T->ptr[1]->width; //顺序结构顺序分配单元方式
             }
             break;
         case IF_THEN:
@@ -831,8 +842,8 @@ void generate_IR(struct node *T)
             boolExp(T->ptr[0]);
             T->width = T->ptr[0]->width;
             strcpy(T->ptr[1]->Snext, T->Snext);
-		strcpy(T->ptr[1]->Etrue, T->Etrue);
-		strcpy(T->ptr[1]->Efalse, T->Efalse);
+            strcpy(T->ptr[1]->Etrue, T->Etrue);
+            strcpy(T->ptr[1]->Efalse, T->Efalse);
             generate_IR(T->ptr[1]); // if子句
             if (T->width < T->ptr[1]->width)
                 T->width = T->ptr[1]->width;
@@ -862,9 +873,9 @@ void generate_IR(struct node *T)
             boolExp(T->ptr[0]); //循环条件，要单独按短路代码处理
             T->width = T->ptr[0]->width;
             strcpy(T->ptr[1]->Snext, newLabel());
-		strcpy(T->ptr[1]->Etrue, T->ptr[1]->Snext);  // 给continue传递
-		strcpy(T->ptr[1]->Efalse, T->ptr[0]->Efalse);  // 给break传递
-            generate_IR(T->ptr[1]); //循环体
+            strcpy(T->ptr[1]->Etrue, T->ptr[1]->Snext);   // 给continue传递
+            strcpy(T->ptr[1]->Efalse, T->ptr[0]->Efalse); // 给break传递
+            generate_IR(T->ptr[1]);                       //循环体
             if (T->width < T->ptr[1]->width)
                 T->width = T->ptr[1]->width;
             T->code = merge(6, genLabel(T->ptr[1]->Snext), T->ptr[0]->code,
@@ -908,18 +919,18 @@ void generate_IR(struct node *T)
         case MINUS:
         case MUL:
         case DIV:
-	  case MOD:
+        case MOD:
         case NOT:
         case UMINUS:
         case FUNC_CALL:
             Exp(T); //处理基本表达式
             break;
-	  case CONTINUE_STMT:
-	  	T->code = genGoto(T->Etrue);
-	  	break;
-	  case BREAK_STMT:
-	  	T->code = genGoto(T->Efalse);
-	  	break;
+        case CONTINUE_STMT:
+            T->code = genGoto(T->Etrue);
+            break;
+        case BREAK_STMT:
+            T->code = genGoto(T->Efalse);
+            break;
         }
     }
 }
@@ -932,11 +943,11 @@ void generate_IR0(struct node *T)
     // fillSymbolTable("write", "", 0, INT, 'F', 4);
     // symbolTable.symbols[1].paramnum = 1;
     // fillSymbolTable("x", "", 1, INT, 'P', 12);
-	fillSymbolTable("putint", "", 0, INT, 'F', 4);
-	symbolTable.symbols[0].paramnum = 1;
-	fillSymbolTable("getint", "", 0, INT, 'F', 4);
-	symbolTable.symbols[1].paramnum = 0;
-	// fillSymbolTable("x", "", 1, INT, 'P', 12);
+    fillSymbolTable("putint", "", 0, INT, 'F', 4);
+    symbolTable.symbols[0].paramnum = 1;
+    fillSymbolTable("getint", "", 0, INT, 'F', 4);
+    symbolTable.symbols[1].paramnum = 0;
+    // fillSymbolTable("x", "", 1, INT, 'P', 12);
     symbol_scope_TX.TX[0] = 0; //外部变量在符号表中的起始序号为0
     symbol_scope_TX.top = 1;
     T->offset = 0; //外部变量在数据区的偏移量
