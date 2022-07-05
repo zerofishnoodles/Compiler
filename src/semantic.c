@@ -390,15 +390,15 @@ int semantic_analysis(struct node *T)
       // printf("%*c函数调用: \n", indent, ' ');
       // printf("%*c函数名: %s\n", indent + 3, ' ', T->type_id);
       i = search_symtable(T->type_id);
-      if(i == -1){
+      if(i == -1){  // 没找到
         semantic_error(T->pos, T->type_id, " undeclared",0);
-      }else if(symbolTable.symbols[i].flag != 'F'){
+      }else if(symbolTable.symbols[i].flag != 'F'){  // 不是函数
         semantic_error(T->pos, T->type_id, " is not a function",0);
       }else{
         temp = semantic_analysis(T->ptr[0]);
-        if(temp < symbolTable.symbols[i].paramnum){
+        if(temp < symbolTable.symbols[i].paramnum){  // 参数不对
           semantic_error(T->pos, "too few arguments to function", T->type_id,1);
-        }else if(temp > symbolTable.symbols[i].paramnum){
+        }else if(temp > symbolTable.symbols[i].paramnum){   
           semantic_error(T->pos, "too many arguments to function", T->type_id,1);
         }
       }
