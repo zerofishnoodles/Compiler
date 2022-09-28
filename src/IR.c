@@ -1,3 +1,5 @@
+#include "def.h"
+
 char *strcat0(char *s1, char *s2)
 {
     static char result[10];
@@ -292,14 +294,6 @@ void Exp(struct node *T)
         {
         case TERM: //查符号表，获得符号表中的位置，类型送type
             rtn = searchSymbolTable(T->type_id);
-            // if (rtn == -1)
-            // semantic_error(T->pos, T->type_id, "变量未定义");
-            //     if (symbolTable.symbols[rtn].flag == 'F')
-            //     {
-            //     }
-            // semantic_error(T->pos, T->type_id, "是函数名，类型不匹配");
-            //     else
-            //     {
             if (symbolTable.symbols[rtn].flag == 'A')
             {
                 T->place = rtn;
